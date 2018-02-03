@@ -115,10 +115,10 @@ to change, not how you can add Azure AD as Identity Provider in a B2C tenant.
 
 ### The authorisation request
 Finally your authorisation request to B2C should include both **domain_hint** and **dh** query string parameters.
-The **domain_hint** should have the value you put under **<Domain>** in your technical profile. This will instruct B2C that the request
+The **domain_hint** should have the value you put under `<Domain>` in your technical profile. This will instruct B2C that the request
 is actually for the corporate Azure AD. And the second (**dh**) will translate into a query string **domain_hint** value for the 
-corporate Azure AD.
-Ad the end, something like that:
+corporate Azure AD: `&domain_hint=Corporate-Domain-Name&dh=azure-ad-domain-name`
+At the end, your authorisation request will look something like that:
 ```
   https://login.microsoftonline.com/b2c-tenant.onmicrosoft.com/oauth2/v2.0/authorize?p=sign-up-in-policy&client_id=valid-client-id&nonce=defaultNonce&redirect_uri=https%3A%2F%2Flocalhost%2F&scope=openid&response_type=id_token&prompt=login&domain_hint=Corporate-Domain-Name&dh=azure-ad-domain-name
 ```

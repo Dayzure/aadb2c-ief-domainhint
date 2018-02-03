@@ -35,7 +35,7 @@ There are three things which we should do.
 
 ### Add a new claim in your claims schema
 The claims schema is on top of your TrustFrameworkExtensions.xml file. You would add a new claim like that:
-
+```xml
   <BuildingBlocks>
     <ClaimsSchema>
       <ClaimType Id="domain_hint">
@@ -45,13 +45,13 @@ The claims schema is on top of your TrustFrameworkExtensions.xml file. You would
       </ClaimType>
     </ClaimsSchema>    
   </BuildingBlocks>
-  
+```  
 This claim will later need in the technical profile
 
 ### Add a new claims transformation to populate this claim value
 We can populate this claim value from the initial authorisation request to the B2C. We can get additional query string parameters 
 like that:
-
+```xml
   <BuildingBlocks>
     ...    
     <ClaimsTransformations>
@@ -65,7 +65,7 @@ like that:
       </ClaimsTransformation>
     </ClaimsTransformations>
   </BuildingBlocks>
-  
+```  
 We use the special {OAUTH-KV:dh} value to indicate that we would like to read a query string value where the key woud be **dh**
 
 ### Use the new claim in the techical profile

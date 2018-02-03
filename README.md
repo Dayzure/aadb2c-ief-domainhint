@@ -27,3 +27,45 @@ the user to the corporate AD, that domain_hint is valid only for the first reque
 ## The solution
 The solution is relatively simple, and once you understand how the Identity Experience Framework works, it will be just a "but of course,
 it is as simple as that"!
+
+Again, please read and understand (and at best create a working sample for yourself) how you federate to Azure AD from B2C tenant.
+In this sample, I am only showing what you should do additionally to provide a domain_hint to the "real" Azure AD.
+
+There are three things which we should do.
+
+### Add a new claim in your claims schema
+The claims schema is on top of your TrustFrameworkExtensions.xml file. You would add a new claim like that:
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="domain_hint">
+        <DisplayName>Domain Hint for AAD</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText/>
+      </ClaimType>
+    </ClaimsSchema>    
+  </BuildingBlocks>
+  
+This claim will later need in the technical profile
+
+### Add a new claims transformation to populate this claim value
+We can populate this claim value from the initial authorisation request to the B2C. We can get additional query string parameters 
+like that:
+
+  <BuildingBlocks>
+    ...    
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CreateDomainHintClaim" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="{OAUTH-KV:dh}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="domain_hint" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+  
+We use the special {OAUTH-KV:dh} value to indicate that we would like to read a query string value where the key woud be **dh**
+
+### Use the new claim in the techical profile

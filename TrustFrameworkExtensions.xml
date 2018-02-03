@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="YOUR_B2C_TENANT.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://YOUR_B2C_TENANT.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>YOUR_B2C_TENANT.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="domain_hint">
+        <DisplayName>Domain Hint for AAD</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText/>
+      </ClaimType>
+    </ClaimsSchema>
+    
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CreateDomainHintClaim" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="{OAUTH-KV:dh}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="domain_hint" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+    
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+<ClaimsProvider>
+    <Domain>Corporate-Domain-Name</Domain>
+    <DisplayName>Login using CORPORATE-DOMAIN</DisplayName>
+    <TechnicalProfiles>
+        <TechnicalProfile Id="CorporateDomainProfile">
+            <DisplayName>CorporateDomain Employee</DisplayName>
+            <Description>Login with your CorporateDomain account</Description>
+            <Protocol Name="OpenIdConnect"/>
+            <OutputTokenFormat>JWT</OutputTokenFormat>
+            <Metadata>
+                <Item Key="METADATA">https://login.windows.net/CorporateDomain.onmicrosoft.com/.well-known/openid-configuration</Item>
+                <Item Key="ProviderName">https://sts.windows.net/TENANT-ID-FOR-CORPORATE-DOMAIN/</Item>
+                <Item Key="client_id">THE-CLIENT-ID</Item>
+                <Item Key="IdTokenAudience">AGAIN-THE-CLIENT-ID</Item>
+                <Item Key="response_types">id_token</Item>
+                <Item Key="UsePolicyInRedirectUri">false</Item>
+            </Metadata>
+            <InputClaimsTransformations>
+	            <InputClaimsTransformation ReferenceId="CreateDomainHintClaim" />
+            </InputClaimsTransformations>
+            <InputClaims>
+              <InputClaim ClaimTypeReferenceId="domain_hint" />
+            </InputClaims>
+        </TechnicalProfile>
+    </TechnicalProfiles>
+</ClaimsProvider>
+  </ClaimsProviders>
+</TrustFrameworkPolicy>

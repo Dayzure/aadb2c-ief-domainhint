@@ -69,3 +69,56 @@ like that:
 We use the special {OAUTH-KV:dh} value to indicate that we would like to read a query string value where the key woud be **dh**
 
 ### Use the new claim in the techical profile
+Finally, we use the newly created claim transformation and claim in the technical profile as an **input claim** like that:
+
+```xml
+            <InputClaimsTransformations>
+	            <InputClaimsTransformation ReferenceId="CreateDomainHintClaim" />
+            </InputClaimsTransformations>
+            <InputClaims>
+              <InputClaim ClaimTypeReferenceId="domain_hint" />
+            </InputClaims>
+```
+
+A more complete view on the technical profile is here:
+```xml
+<ClaimsProvider>
+    <Domain>Corporate-Domain-Name</Domain>
+    <DisplayName>Login using CORPORATE-DOMAIN</DisplayName>
+    <TechnicalProfiles>
+        <TechnicalProfile Id="CorporateDomainProfile">
+            <DisplayName>CorporateDomain Employee</DisplayName>
+            <Description>Login with your CorporateDomain account</Description>
+            <Protocol Name="OpenIdConnect"/>
+            <OutputTokenFormat>JWT</OutputTokenFormat>
+            <Metadata>
+                <Item Key="METADATA">https://login.windows.net/CorporateDomain.onmicrosoft.com/.well-known/openid-configuration</Item>
+                <Item Key="ProviderName">https://sts.windows.net/TENANT-ID-FOR-CORPORATE-DOMAIN/</Item>
+                <Item Key="client_id">THE-CLIENT-ID</Item>
+                <Item Key="IdTokenAudience">AGAIN-THE-CLIENT-ID</Item>
+                <Item Key="response_types">id_token</Item>
+                <Item Key="UsePolicyInRedirectUri">false</Item>
+            </Metadata>
+            <InputClaimsTransformations>
+	            <InputClaimsTransformation ReferenceId="CreateDomainHintClaim" />
+            </InputClaimsTransformations>
+            <InputClaims>
+              <InputClaim ClaimTypeReferenceId="domain_hint" />
+            </InputClaims>
+        </TechnicalProfile>
+    </TechnicalProfiles>
+</ClaimsProvider>
+```
+
+A complete [TrustFrameworkExtensions.xml](./TrustFrameworkExtensions.xml) file is located [here in this repository](./TrustFrameworkExtensions.xml). Be aware - here I am only showing you what you need
+to change, not how you can add Azure AD as Identity Provider in a B2C tenant.
+
+### The authorisation request
+Finally your authorisation request to B2C should include both **domain_hint** and **dh** query string parameters.
+The **domain_hint** should have the value you put under **<Domain>** in your technical profile. This will instruct B2C that the request
+is actually for the corporate Azure AD. And the second (**dh**) will translate into a query string **domain_hint** value for the 
+corporate Azure AD.
+Ad the end, something like that:
+```
+  https://login.microsoftonline.com/b2c-tenant.onmicrosoft.com/oauth2/v2.0/authorize?p=sign-up-in-policy&client_id=valid-client-id&nonce=defaultNonce&redirect_uri=https%3A%2F%2Flocalhost%2F&scope=openid&response_type=id_token&prompt=login&domain_hint=Corporate-Domain-Name&dh=azure-ad-domain-name
+```

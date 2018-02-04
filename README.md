@@ -124,6 +124,7 @@ At the end, your authorisation request will look something like that:
 ```
 ## Important
 When you register an Application in your **corporate** Azure AD - to be the trust endpoint for the B2C requests, make sure you
-flag it as being https://docs.microsoft.com/en-us/azure/active-directory/application-dev-setup-multi-tenant-app. Thus you will not have to create a trust relationship with all your partners - but just with your app.
+flag it as being [multi tenant](https://docs.microsoft.com/en-us/azure/active-directory/application-dev-setup-multi-tenant-app).
+Thus you will not have to create a trust relationship with all your partners - but just with your app.
 Again, please read follow all the links under [multi tenant apps](https://docs.microsoft.com/en-us/azure/active-directory/application-dev-setup-multi-tenant-app) to fully understand
 what multi tenant apps are and how the authentication works!

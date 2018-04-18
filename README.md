@@ -73,10 +73,10 @@ Finally, we use the newly created claim transformation and claim in the technica
 
 ```xml
 <InputClaimsTransformations>
-	<InputClaimsTransformation ReferenceId="CreateDomainHintClaim" />
+    <InputClaimsTransformation ReferenceId="CreateDomainHintClaim" />
 </InputClaimsTransformations>
 <InputClaims>
-  <InputClaim ClaimTypeReferenceId="domain_hint" />
+    <InputClaim ClaimTypeReferenceId="domain_hint" />
 </InputClaims>
 ```
 

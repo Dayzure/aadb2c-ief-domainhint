@@ -52,19 +52,19 @@ This claim will later need in the technical profile
 We can populate this claim value from the initial authorisation request to the B2C. We can get additional query string parameters 
 like that:
 ```xml
-  <BuildingBlocks>
-    ...    
-    <ClaimsTransformations>
-      <ClaimsTransformation Id="CreateDomainHintClaim" TransformationMethod="CreateStringClaim">
-        <InputParameters>
-          <InputParameter Id="value" DataType="string" Value="{OAUTH-KV:dh}" />
-        </InputParameters>
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="domain_hint" TransformationClaimType="createdClaim" />
-        </OutputClaims>
-      </ClaimsTransformation>
-    </ClaimsTransformations>
-  </BuildingBlocks>
+<BuildingBlocks>
+	...    
+	<ClaimsTransformations>
+	  <ClaimsTransformation Id="CreateDomainHintClaim" TransformationMethod="CreateStringClaim">
+		<InputParameters>
+		  <InputParameter Id="value" DataType="string" Value="{OAUTH-KV:dh}" />
+		</InputParameters>
+		<OutputClaims>
+		  <OutputClaim ClaimTypeReferenceId="domain_hint" TransformationClaimType="createdClaim" />
+		</OutputClaims>
+	  </ClaimsTransformation>
+	</ClaimsTransformations>
+</BuildingBlocks>
 ```  
 We use the special {OAUTH-KV:dh} value to indicate that we would like to read a query string value where the key woud be **dh**
 
@@ -72,12 +72,12 @@ We use the special {OAUTH-KV:dh} value to indicate that we would like to read a 
 Finally, we use the newly created claim transformation and claim in the technical profile as an **input claim** like that:
 
 ```xml
-            <InputClaimsTransformations>
-	            <InputClaimsTransformation ReferenceId="CreateDomainHintClaim" />
-            </InputClaimsTransformations>
-            <InputClaims>
-              <InputClaim ClaimTypeReferenceId="domain_hint" />
-            </InputClaims>
+<InputClaimsTransformations>
+	<InputClaimsTransformation ReferenceId="CreateDomainHintClaim" />
+</InputClaimsTransformations>
+<InputClaims>
+  <InputClaim ClaimTypeReferenceId="domain_hint" />
+</InputClaims>
 ```
 
 A more complete view on the technical profile is here:

@@ -36,15 +36,15 @@ There are three things which we should do.
 ### Add a new claim in your claims schema
 The claims schema is on top of your TrustFrameworkExtensions.xml file. You would add a new claim like that:
 ```xml
-  <BuildingBlocks>
+<BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="domain_hint">
-        <DisplayName>Domain Hint for AAD</DisplayName>
-        <DataType>string</DataType>
-        <UserHelpText/>
-      </ClaimType>
-    </ClaimsSchema>    
-  </BuildingBlocks>
+        <ClaimType Id="domain_hint">
+            <DisplayName>Domain Hint for AAD</DisplayName>
+            <DataType>string</DataType>
+            <UserHelpText/>
+        </ClaimType>
+    </ClaimsSchema>
+</BuildingBlocks>
 ```  
 This claim will later need in the technical profile
 
